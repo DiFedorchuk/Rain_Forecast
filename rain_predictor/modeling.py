@@ -18,11 +18,18 @@ from rain_predictor.data import prepare_modeling_dataframe, split_dataset
 Artifact = dict[str, Any]
 
 
-def patch_artifact_compatibility(artifact: Artifact) -> Artifact:
-    imputer = artifact.get("imputer")
+def patch_imputer(imputer: Any) -> Any:
     if imputer is not None and not hasattr(imputer, "_fill_dtype"):
         stats = getattr(imputer, "statistics_", None)
-        imputer._fill_dtype = stats.dtype if stats is not None and hasattr(stats, "dtype") else np.float64
+        dtype = stats.dtype if stats is not None and hasattr(stats, "dtype") else np.float64
+        object.__setattr__(imputer, "_fill_dtype", dtype)
+    return imputer
+
+
+def patch_artifact_compatibility(artifact: Artifact) -> Artifact:
+    imputer = artifact.get("imputer")
+    if imputer is not None:
+        patch_imputer(imputer)
     return artifact
 
 
@@ -59,6 +66,7 @@ def transform_inputs(
     scaler: MinMaxScaler,
     encoder: OneHotEncoder,
 ) -> pd.DataFrame:
+    patch_imputer(imputer)
     imputed_numeric = pd.DataFrame(
         imputer.transform(inputs_df[numeric_cols]),
         columns=numeric_cols,
@@ -78,6 +86,7 @@ def transform_inputs(
 
 
 def preprocess_user_input(user_input: dict, artifact: Artifact) -> pd.DataFrame:
+    patch_artifact_compatibility(artifact)
     input_cols = list(artifact["input_cols"])
     input_df = pd.DataFrame([user_input])
     validate_required_columns(input_df, input_cols, "Prediction input")
@@ -95,6 +104,7 @@ def preprocess_user_input(user_input: dict, artifact: Artifact) -> pd.DataFrame:
 
 
 def get_numeric_defaults(artifact: Artifact) -> dict[str, float]:
+    patch_artifact_compatibility(artifact)
     numeric_cols = list(artifact["numeric_cols"])
     stored_defaults = artifact.get("numeric_defaults")
     if isinstance(stored_defaults, dict):

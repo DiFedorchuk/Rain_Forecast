@@ -18,8 +18,17 @@ from rain_predictor.data import prepare_modeling_dataframe, split_dataset
 Artifact = dict[str, Any]
 
 
+def patch_artifact_compatibility(artifact: Artifact) -> Artifact:
+    imputer = artifact.get("imputer")
+    if imputer is not None and not hasattr(imputer, "_fill_dtype"):
+        stats = getattr(imputer, "statistics_", None)
+        imputer._fill_dtype = stats.dtype if stats is not None and hasattr(stats, "dtype") else np.float64
+    return artifact
+
+
 def load_artifact(artifact_path: str | Path = DEFAULT_ARTIFACT_PATH) -> Artifact:
-    return joblib.load(artifact_path)
+    artifact = joblib.load(artifact_path)
+    return patch_artifact_compatibility(artifact)
 
 
 def save_artifact(

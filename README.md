@@ -123,23 +123,14 @@ Because the target is a binary classification problem, Accuracy is considered to
 ---
 
 ## 📈 ROC AUC Analysis
-2
- 
-3
+
 The Receiver Operating Characteristic (ROC) curve illustrates the model's ability to distinguish between positive and negative classes across different classification thresholds.
-4
- 
-5
+
 <p align="center">
-6
-image/roc_auc_curve.png
-7
+  image/roc_auc_curve.png
 </p>
-8
- 
-9
+
 The dashed diagonal line represents the expected performance of a random classifier. Curves positioned closer to the upper-left corner indicate better classification performance.
-### ROC AUC by Dataset
 
 | Dataset | ROC AUC |
 |:---|---:|

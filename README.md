@@ -127,7 +127,7 @@ Because the target is a binary classification problem, Accuracy is considered to
 The Receiver Operating Characteristic curve illustrates the model's ability to distinguish between positive and negative classes across different classification thresholds.
 
 <p align="center">
-  image/roc_curve.png
+  image/roc_auc_curve.png
 </p>
 
 The dashed diagonal line represents the expected performance of a random classifier. Curves positioned closer to the upper-left corner indicate better classification performance.

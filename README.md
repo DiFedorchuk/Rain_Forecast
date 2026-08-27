@@ -130,8 +130,6 @@ The Receiver Operating Characteristic curve illustrates the model's ability to d
   image/roc_auc_curve.png
 </p>
 
-The dashed diagonal line represents the expected performance of a random classifier. Curves positioned closer to the upper-left corner indicate better classification performance.
-
 ### ROC AUC by Dataset
 
 | Dataset | ROC AUC |
@@ -179,7 +177,7 @@ The nearly identical ROC AUC values across the three dataset splits indicate tha
 ├── .streamlit/
 │   └── config.toml
 ├── image/
-│   └── roc_curve.png
+│   └── roc_auc_curve.png
 ├── model/
 │   └── aussie_rain.joblib
 ├── rain_predictor/
